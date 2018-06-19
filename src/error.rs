@@ -268,6 +268,12 @@ impl From<JoinPathsError> for Error {
     }
 }
 
+impl From<str::Utf8Error> for Error {
+    fn from(e: str::Utf8Error) -> Error {
+        Error::from_str(error::Error::description(&e))
+    }
+}
+
 
 #[cfg(test)]
 mod tests {

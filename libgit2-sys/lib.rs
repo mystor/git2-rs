@@ -71,6 +71,7 @@ pub enum git_tree {}
 pub enum git_tree_entry {}
 pub enum git_treebuilder {}
 pub enum git_push {}
+pub enum git_mailmap {}
 pub enum git_note {}
 pub enum git_note_iterator {}
 pub enum git_status_list {}
@@ -2959,6 +2960,28 @@ extern {
     pub fn git_refdb_set_backend(refdb: *mut git_refdb, backend: *mut git_refdb_backend) -> c_int;
     pub fn git_refdb_compress(refdb: *mut git_refdb) -> c_int;
     pub fn git_refdb_free(refdb: *mut git_refdb);
+
+    // mailmap
+    pub fn git_mailmap_new(out: *mut *mut git_mailmap) -> c_int;
+    pub fn git_mailmap_free(mm: *mut git_mailmap);
+    pub fn git_mailmap_add_entry(mm: *mut git_mailmap,
+                                 real_name: *const c_char,
+                                 real_email: *const c_char,
+                                 replace_name: *const c_char,
+                                 replace_email: *const c_char) -> c_int;
+    pub fn git_mailmap_from_buffer(out: *mut *mut git_mailmap,
+                                   buf: *const c_char,
+                                   length: size_t) -> c_int;
+    pub fn git_mailmap_from_repository(out: *mut *mut git_mailmap,
+                                       repo: *mut git_repository) -> c_int;
+    pub fn git_mailmap_resolve(real_name: *mut *const c_char,
+                               real_email: *mut *const c_char,
+                               mm: *const git_mailmap,
+                               name: *const c_char,
+                               email: *const c_char) -> c_int;
+    pub fn git_mailmap_resolve_signature(out: *mut *mut git_signature,
+                                         mm: *const git_mailmap,
+                                         sig: *const git_signature) -> c_int;
 }
 
 pub fn init() {
